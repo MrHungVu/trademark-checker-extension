@@ -1,6 +1,10 @@
+console.log('🔍 Trademark Checker Extension: Content script loaded');
+
 let widgetInjected = false;
 
 function extractListingData() {
+  console.log('🔍 Extracting listing data...');
+  
   const data = {
     title: '',
     tags: [],
@@ -8,22 +12,77 @@ function extractListingData() {
     shopName: ''
   };
 
-  const titleElement = document.querySelector('h1[data-test-id="listing-page-title"], h1');
+  // Try multiple selectors for title
+  const titleSelectors = [
+    'h1[data-test-id="listing-page-title"]',
+    'h1.wt-text-body-01',
+    'h1.wt-text-heading-01',
+    'h1[class*="listing-page-title"]',
+    'h1'
+  ];
+  
+  let titleElement = null;
+  for (const selector of titleSelectors) {
+    titleElement = document.querySelector(selector);
+    if (titleElement) {
+      console.log(`🔍 Found title with selector: ${selector}`);
+      break;
+    }
+  }
+  
   if (titleElement) {
     data.title = titleElement.textContent.trim();
+    console.log(`🔍 Title extracted: "${data.title}"`);
+  } else {
+    console.log('🔍 No title element found');
   }
 
-  const tagElements = document.querySelectorAll('[data-test-id="listing-page-tags"] a, .tag-list a, .wt-tag a');
+  // Try multiple selectors for tags
+  const tagSelectors = [
+    '[data-test-id="listing-page-tags"] a',
+    '.tag-list a',
+    '.wt-tag a',
+    'a[href*="/search?q="]',
+    '.listing-tag a'
+  ];
+  
+  let tagElements = [];
+  for (const selector of tagSelectors) {
+    tagElements = document.querySelectorAll(selector);
+    if (tagElements.length > 0) {
+      console.log(`🔍 Found tags with selector: ${selector} (${tagElements.length} tags)`);
+      break;
+    }
+  }
+  
   tagElements.forEach(tag => {
     const tagText = tag.textContent.trim();
     if (tagText && !data.tags.includes(tagText)) {
       data.tags.push(tagText);
     }
   });
+  console.log(`🔍 Tags extracted: ${data.tags.join(', ') || 'none'}`);
 
-  const shopElement = document.querySelector('[data-test-id="shop-name"], .shop-name a, a[href*="/shop/"]');
+  // Try multiple selectors for shop name
+  const shopSelectors = [
+    '[data-test-id="shop-name"]',
+    '.shop-name a',
+    'a[href*="/shop/"]',
+    '.wt-text-link-no-underline[href*="/shop/"]'
+  ];
+  
+  let shopElement = null;
+  for (const selector of shopSelectors) {
+    shopElement = document.querySelector(selector);
+    if (shopElement) {
+      console.log(`🔍 Found shop with selector: ${selector}`);
+      break;
+    }
+  }
+  
   if (shopElement) {
     data.shopName = shopElement.textContent.trim();
+    console.log(`🔍 Shop name extracted: "${data.shopName}"`);
   }
 
   return data;
@@ -59,10 +118,33 @@ function escapeHtml(text) {
 }
 
 function injectWidget() {
-  if (widgetInjected) return;
+  console.log('🔍 Attempting to inject widget...');
+  
+  if (widgetInjected) {
+    console.log('🔍 Widget already injected, skipping');
+    return;
+  }
 
-  const titleElement = document.querySelector('h1[data-test-id="listing-page-title"], h1');
+  // Try multiple selectors for title element
+  const titleSelectors = [
+    'h1[data-test-id="listing-page-title"]',
+    'h1.wt-text-body-01',
+    'h1.wt-text-heading-01', 
+    'h1[class*="listing-page-title"]',
+    'h1'
+  ];
+  
+  let titleElement = null;
+  for (const selector of titleSelectors) {
+    titleElement = document.querySelector(selector);
+    if (titleElement) {
+      console.log(`🔍 Found title element for widget injection with selector: ${selector}`);
+      break;
+    }
+  }
+  
   if (!titleElement) {
+    console.log('🔍 No title element found, retrying in 1 second...');
     setTimeout(injectWidget, 1000);
     return;
   }
@@ -70,15 +152,37 @@ function injectWidget() {
   const data = extractListingData();
   const widgetHTML = createWidget(data);
 
-  const container = titleElement.closest('div') || titleElement.parentElement;
-  container.insertAdjacentHTML('afterend', widgetHTML);
-  widgetInjected = true;
+  // Find the best container for injection
+  let container = titleElement.parentElement;
+  
+  // Try to find a better container that's not too narrow
+  while (container && container.parentElement && 
+         (container.offsetWidth < 300 || container.tagName === 'H1')) {
+    container = container.parentElement;
+  }
+  
+  console.log(`🔍 Injecting widget after element: ${container.tagName}.${container.className}`);
+  
+  try {
+    container.insertAdjacentHTML('afterend', widgetHTML);
+    widgetInjected = true;
+    console.log('🔍 Widget injected successfully!');
 
-  const checkButton = document.getElementById('tm-check-btn');
-  checkButton.addEventListener('click', () => checkTrademark(data));
+    const checkButton = document.getElementById('tm-check-btn');
+    if (checkButton) {
+      checkButton.addEventListener('click', () => checkTrademark(data));
+      console.log('🔍 Click handler attached to button');
+    } else {
+      console.error('🔍 Check button not found after injection');
+    }
+  } catch (error) {
+    console.error('🔍 Error injecting widget:', error);
+  }
 }
 
 async function checkTrademark(data) {
+  console.log('🔍 Checking trademark for:', data);
+  
   const button = document.getElementById('tm-check-btn');
   const resultsDiv = document.getElementById('tm-results');
   
@@ -88,6 +192,8 @@ async function checkTrademark(data) {
   resultsDiv.innerHTML = '';
 
   try {
+    console.log('🔍 Sending message to background script...');
+    
     const response = await chrome.runtime.sendMessage({
       action: 'checkTrademark',
       data: {
@@ -97,13 +203,20 @@ async function checkTrademark(data) {
       }
     });
 
-    if (response.error) {
+    console.log('🔍 Received response:', response);
+
+    if (response && response.error) {
       throw new Error(response.error);
+    }
+
+    if (!response) {
+      throw new Error('No response from background script');
     }
 
     displayResults(response);
   } catch (error) {
-    displayError(error.message);
+    console.error('🔍 Error checking trademark:', error);
+    displayError(error.message || 'Unknown error occurred');
   } finally {
     button.disabled = false;
     button.textContent = 'Check USPTO Trademark';
@@ -170,24 +283,42 @@ function displayError(message) {
 }
 
 function waitForListingPage() {
+  console.log('🔍 Checking if on listing page...');
+  console.log('🔍 Current URL:', window.location.href);
+  console.log('🔍 Pathname:', window.location.pathname);
+  
   if (window.location.pathname.includes('/listing/')) {
+    console.log('🔍 On listing page, waiting 500ms before injection');
     setTimeout(injectWidget, 500);
+  } else {
+    console.log('🔍 Not on a listing page');
   }
 }
 
+// Initialize the extension
+console.log('🔍 Document ready state:', document.readyState);
+
 if (document.readyState === 'loading') {
+  console.log('🔍 Document still loading, waiting for DOMContentLoaded');
   document.addEventListener('DOMContentLoaded', waitForListingPage);
 } else {
+  console.log('🔍 Document already loaded, checking page immediately');
   waitForListingPage();
 }
 
+// Watch for URL changes (Etsy uses client-side routing)
 let lastUrl = location.href;
+console.log('🔍 Setting up URL change observer');
+
 new MutationObserver(() => {
   const url = location.href;
   if (url !== lastUrl) {
+    console.log('🔍 URL changed from', lastUrl, 'to', url);
     lastUrl = url;
     widgetInjected = false;
+    
     if (url.includes('/listing/')) {
+      console.log('🔍 New URL is a listing page, re-injecting widget');
       setTimeout(injectWidget, 500);
     }
   }
