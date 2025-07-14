@@ -11,14 +11,15 @@
     <h1>Trademark Checker Settings</h1>
     
     <section class="settings-section">
-      <h2>API Configuration</h2>
+      <h2>USPTO API Configuration</h2>
       <div class="form-group">
-        <label for="apiKey">API Key:</label>
-        <input type="password" id="apiKey" placeholder="Enter your API key">
+        <label for="rapidApiKey">RapidAPI Key:</label>
+        <input type="password" id="rapidApiKey" placeholder="Enter your RapidAPI key">
+        <small>Get your API key from <a href="https://rapidapi.com/pentium10/api/uspto-trademark" target="_blank">USPTO Trademark API on RapidAPI</a></small>
       </div>
       <div class="form-group">
-        <label for="apiEndpoint">API Endpoint:</label>
-        <input type="text" id="apiEndpoint" placeholder="https://api.example.com/trademark">
+        <label>API Status:</label>
+        <span id="apiStatus" class="api-status">Not configured</span>
       </div>
     </section>
     
@@ -37,15 +38,8 @@
         </label>
       </div>
       <div class="form-group">
-        <label for="searchRegion">Search Region:</label>
-        <select id="searchRegion">
-          <option value="us">United States</option>
-          <option value="eu">European Union</option>
-          <option value="uk">United Kingdom</option>
-          <option value="ca">Canada</option>
-          <option value="au">Australia</option>
-          <option value="global">Global</option>
-        </select>
+        <label>Data Source:</label>
+        <span id="dataSource" class="data-source">USPTO Database</span>
       </div>
     </section>
     

@@ -118,3 +118,30 @@ button:not(.primary):hover {
   border: 1px solid #f5c6cb;
   display: block;
 }
+
+.status-message.info {
+  background-color: #cce5ff;
+  color: #004085;
+  border: 1px solid #b8daff;
+  display: block;
+}
+
+.api-status {
+  font-weight: 500;
+}
+
+small {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+  font-size: 12px;
+}
+
+small a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+small a:hover {
+  text-decoration: underline;
+}

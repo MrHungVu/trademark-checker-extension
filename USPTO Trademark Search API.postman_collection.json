@@ -1,0 +1,1573 @@
+{
+	"info": {
+		"_postman_id": "bff53e66-8b2b-4274-a1d1-9e0035e67e58",
+		"name": "USPTO Trademark Search API",
+		"description": "The [USPTO Trademark API](https://rapidapi.com/pentium10/api/uspto-trademark) hosted on RapidAPI Hub provides access to the USPTO Trademark Search API, offering instant trademark search, availability checks, and comprehensive data retrieval from the United States Patent and Trademark Office. It includes endpoints for keyword searches, serial number lookups, owner information, and database status, with support for batch processing and pagination where applicable.\n\n**Key Features:**\n\n- Keyword Search (generic and full text)\n    \n- Trademark Availability Check\n    \n- Expiring Trademarks by Date\n    \n- Trademarks by Registration Date\n    \n- Serial Number Search (detailed info)\n    \n- Owner Search\n    \n- Batch Processing for efficient data retrieval (up to 25,000 results for batch calls)\n    \n- Pagination Support for large result sets\n    \n- Database Status (freshness, latest updates, updated daily)\n    \n- Check out [FAQ](https://rapidapi.com/pentium10/api/uspto-trademark/tutorials/faq-)\n    \n\n**Authentication:**  \nThis API uses **RapidAPI's API Key authentication**. You will need to set your `X-RapidAPI-Key` in the collection variables. To get the API key subscribe to packages [here](https://rapidapi.com/pentium10/api/uspto-trademark).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22885290",
+		"_collection_link": "https://www.postman.com/pentium10/uspto-trademark-api/collection/2ezvmws/uspto-trademark-search-api?action=share&source=collection_link&creator=22885290"
+	},
+	"item": [
+		{
+			"name": "Single Record Lookups & Direct Search",
+			"item": [
+				{
+					"name": "Trademark Available",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/v1/trademarkAvailable/:keyword",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"trademarkAvailable",
+								":keyword"
+							],
+							"variable": [
+								{
+									"key": "keyword",
+									"value": "netflix",
+									"description": "The keyword to check for trademark availability."
+								}
+							]
+						},
+						"description": "Checks if a trademark keyword is available for use before filing an application. Returns a simple 'yes' or 'no' response."
+					},
+					"response": [
+						{
+							"name": "Example Trademark Available (No)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://uspto-trademark.p.rapidapi.com/v1/trademarkAvailable/amazon",
+									"protocol": "https",
+									"host": [
+										"uspto-trademark",
+										"p",
+										"rapidapi",
+										"com"
+									],
+									"path": [
+										"v1",
+										"trademarkAvailable",
+										"amazon"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[{\"keyword\":\"amazon\",\"available\":\"no\"}]"
+						},
+						{
+							"name": "Example Trademark Available (Yes)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/v1/trademarkAvailable/uniquemark",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"v1",
+										"trademarkAvailable",
+										"uniquemark"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[{\"keyword\":\"uniquemark\",\"available\":\"yes\"}]"
+						}
+					]
+				},
+				{
+					"name": "Trademark Search by Keyword",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/v1/trademarkSearch/:keyword/:searchType",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"trademarkSearch",
+								":keyword",
+								":searchType"
+							],
+							"variable": [
+								{
+									"key": "keyword",
+									"value": "amazon",
+									"description": "The trademark keyword to search for."
+								},
+								{
+									"key": "searchType",
+									"value": "all",
+									"description": "Type of search: 'active,all'"
+								}
+							]
+						},
+						"description": "Searches for specific trademarks using a keyword. Refine search with 'generic search' or 'full text search' via the searchType parameter."
+					},
+					"response": [
+						{
+							"name": "Example Trademark Search Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://uspto-trademark.p.rapidapi.com/v1/trademarkSearch/amazon/active,all",
+									"protocol": "https",
+									"host": [
+										"uspto-trademark",
+										"p",
+										"rapidapi",
+										"com"
+									],
+									"path": [
+										"v1",
+										"trademarkSearch",
+										"amazon",
+										"active,all"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"count\": 5,\n\t\"items\": [\n\t\t{\n\t\t\t\"keyword\": \"AMAZON KENDRA\",\n\t\t\t\"registration_number\": \"6252661\",\n\t\t\t\"serial_number\": \"88712496\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\",\n\t\t\t\"status_date\": \"2021-01-19\",\n\t\t\t\"status_definition\": \"REGISTERED\",\n\t\t\t\"filing_date\": \"2019-12-02\",\n\t\t\t\"registration_date\": \"2021-01-19\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2027-01-19\",\n\t\t\t\"description\": \"Software as a service (SaaS) featuring software for natural language processing; Software as a service (SaaS) featuring software for natural language understanding; Software as a service (SaaS) featuring software for semantic analysis; Software as a service (SaaS) featuring software for data processing; Software as a service (SaaS) featuring software for processing text files; Software as a service (SaaS) featuring software that uses machine learning and natural language algorithms to search structured and unstructured data; Software as a service (SaaS) featuring software for the searching, profiling, classifying, extracting, collection, organizing, transmission, storage, and sharing of data and information; Software as a service (SaaS) featuring software for employees to search for and locate data and information stored in corporate and organizational data sources; Software as a service (SaaS) featuring software for use in responding to customer inquiries; Software as a service (SaaS) featuring machine learning and artificial intelligence software for use in automated customer support; Software as a service (SaaS) featuring software for use as an application programming interface; application service provider featuring application programming interface (api) software for the integration of machine learning, artificial intelligence, and natural language processing into websites and online software; Rental of computer software\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"30\",\n\t\t\t\t\t\"owner_label\": \"Original Registrant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Amazon Technologies, Inc.\",\n\t\t\t\t\t\"address1\": \"410 Terry Ave N\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Seattle\",\n\t\t\t\t\t\"state\": \"WA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"98109\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"AMAZON STUDIOS\",\n\t\t\t\"registration_number\": \"6239839\",\n\t\t\t\"serial_number\": \"90100325\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\",\n\t\t\t\"status_date\": \"2021-01-05\",\n\t\t\t\"status_definition\": \"REGISTERED\",\n\t\t\t\"filing_date\": \"2020-08-07\",\n\t\t\t\"registration_date\": \"2021-01-05\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2027-01-05\",\n\t\t\t\"description\": \"Position 1 \\\"STUDIOS\\\"\\n\\nPosition 2 entertainment services in the nature of development, creation, production, distribution, and post-production of motion pictures, television shows, and multimedia entertainment content; production and distribution of television shows and movies\\n\\n\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"30\",\n\t\t\t\t\t\"owner_label\": \"Original Registrant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Amazon Technologies, Inc.\",\n\t\t\t\t\t\"address1\": \"410 Terry Avenue North\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Seattle\",\n\t\t\t\t\t\"state\": \"WA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"98109\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"AMAZON CONNECT\",\n\t\t\t\"registration_number\": \"6234089\",\n\t\t\t\"serial_number\": \"87388099\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\",\n\t\t\t\"status_date\": \"2020-12-29\",\n\t\t\t\"status_definition\": \"REGISTERED\",\n\t\t\t\"filing_date\": \"2017-03-28\",\n\t\t\t\"registration_date\": \"2020-12-29\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2026-12-29\",\n\t\t\t\"description\": \"Position 1 \\\"CONNECT\\\"\\n\\nPosition 2 Operation and management of telephone call centers and contact centers for others\\n\\nPosition 3 Providing internet chat rooms; transmission of messages; electronic transmission of e-mail; providing on-line forums for transmission of messages among computer users\\n\\n\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"30\",\n\t\t\t\t\t\"owner_label\": \"Original Registrant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Amazon Technologies, Inc.\",\n\t\t\t\t\t\"address1\": \"410 Terry Ave N\",\n\t\t\t\t\t\"address2\": \"Attn: Trademarks\",\n\t\t\t\t\t\"city\": \"Seattle\",\n\t\t\t\t\t\"state\": \"WA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"98109\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"AMAZON\",\n\t\t\t\"registration_number\": \"6228267\",\n\t\t\t\"serial_number\": \"87357919\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\",\n\t\t\t\"status_date\": \"2020-12-22\",\n\t\t\t\"status_definition\": \"REGISTERED\",\n\t\t\t\"filing_date\": \"2017-03-03\",\n\t\t\t\"registration_date\": \"2020-12-22\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2026-12-22\",\n\t\t\t\"description\": \"Financial and monetary services, namely, financial management, financial planning, financial research; debit card and credit card payment processing services; issuing credit cards\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"30\",\n\t\t\t\t\t\"owner_label\": \"Original Registrant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Amazon Technologies, Inc.\",\n\t\t\t\t\t\"address1\": \"Attn: Trademarks\",\n\t\t\t\t\t\"address2\": \"410 Terry Ave N\",\n\t\t\t\t\t\"city\": \"Seattle\",\n\t\t\t\t\t\"state\": \"WA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"98109\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"AMAZON DASH\",\n\t\t\t\"registration_number\": \"6228210\",\n\t\t\t\"serial_number\": \"86592069\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\",\n\t\t\t\"status_date\": \"2020-12-22\",\n\t\t\t\"status_definition\": \"REGISTERED\",\n\t\t\t\"filing_date\": \"2015-04-09\",\n\t\t\t\"registration_date\": \"2020-12-22\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2026-12-22\",\n\t\t\t\"description\": \"mounts and multifunctional electronic devices for transmitting and uploading information regarding potential purchases\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"30\",\n\t\t\t\t\t\"owner_label\": \"Original Registrant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Amazon Technologies, Inc.\",\n\t\t\t\t\t\"address1\": \"410 Terry Ave N\",\n\t\t\t\t\t\"address2\": \"ATTN: Trademarks\",\n\t\t\t\t\t\"city\": \"Seattle\",\n\t\t\t\t\t\"state\": \"WA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"98109\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Serial Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/v1/serialSearch/:serial_number",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"serialSearch",
+								":serial_number"
+							],
+							"variable": [
+								{
+									"key": "serial_number",
+									"value": "72286256",
+									"description": "The trademark serial number to retrieve."
+								}
+							]
+						},
+						"description": "Retrieves detailed information about a trademark using its serial number."
+					},
+					"response": [
+						{
+							"name": "Example Serial Search Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://uspto-trademark.p.rapidapi.com/v1/serialSearch/75527221",
+									"protocol": "https",
+									"host": [
+										"uspto-trademark",
+										"p",
+										"rapidapi",
+										"com"
+									],
+									"path": [
+										"v1",
+										"serialSearch",
+										"75527221"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"count\": 1,\n\t\"items\": [\n\t\t{\n\t\t\t\"keyword\": \"WELLNESS SUPER5MIX\",\n\t\t\t\"registration_number\": \"2322461\",\n\t\t\t\"serial_number\": \"75527221\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"800\",\n\t\t\t\"status_date\": \"2010-01-11\",\n\t\t\t\"status_definition\": \"REGISTERED AND RENEWED\",\n\t\t\t\"filing_date\": \"1998-07-29\",\n\t\t\t\"registration_date\": \"2000-02-22\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2030-02-22\",\n\t\t\t\"description\": \"Position 1 pet food and pet treats, dog food and cat food\\n\\nPosition 2 WELLNESS SUPER 5 MIX\\n\\n\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"32\",\n\t\t\t\t\t\"owner_label\": \"2nd owner after registration\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"WELLPET LLC\",\n\t\t\t\t\t\"address1\": \"200 AMES POND DRIVE\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"TEWKSBURY\",\n\t\t\t\t\t\"state\": \"MA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"018761274\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Owner Search by keyword",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/v1/ownerSearch/:search_keyword/:postcode",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"ownerSearch",
+								":search_keyword",
+								":postcode"
+							],
+							"variable": [
+								{
+									"key": "search_keyword",
+									"value": "null",
+									"description": "The owner's name or a keyword in their name to search for. Can be left empty if 'postcode' is provided."
+								},
+								{
+									"key": "postcode",
+									"value": "90028",
+									"description": "The owner's postcode to search for. Can be left empty if 'search_keyword' is provided."
+								}
+							]
+						},
+						"description": "Searches for trademarks owned by a specific individual or organization using their name or postcode. At least one of `search_keyword` or `postcode` should be provided."
+					},
+					"response": [
+						{
+							"name": "Example Owner Search Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://uspto-trademark.p.rapidapi.com/v1/ownerSearch/netflix/",
+									"protocol": "https",
+									"host": [
+										"uspto-trademark",
+										"p",
+										"rapidapi",
+										"com"
+									],
+									"path": [
+										"v1",
+										"ownerSearch",
+										"netflix",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"count\": 1,\n\t\"items\": [\n\t\t{\n\t\t\t\"name\": \"NETFLIX, INC.\",\n\t\t\t\"address1\": \"5617 SCOTTS VALLEY DR.\",\n\t\t\t\"address2\": null,\n\t\t\t\"city\": \"SCOTTS VALLEY\",\n\t\t\t\"state\": \"CA\",\n\t\t\t\"country\": \"US\",\n\t\t\t\"postcode\": \"95066\",\n\t\t\t\"trademarks\": [\n\t\t\t\t{\n\t\t\t\t\t\"keyword\": \"NETFLICKS\",\n\t\t\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\t\t\"serial_number\": \"75412576\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Owner Search by postcode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/v1/ownerSearch/:search_keyword/:postcode",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"ownerSearch",
+								":search_keyword",
+								":postcode"
+							],
+							"variable": [
+								{
+									"key": "search_keyword",
+									"value": "null",
+									"description": "The owner's name or a keyword in their name to search for. Can be left empty if 'postcode' is provided."
+								},
+								{
+									"key": "postcode",
+									"value": "90028",
+									"description": "The owner's postcode to search for. Can be left empty if 'search_keyword' is provided."
+								}
+							]
+						},
+						"description": "Searches for trademarks owned by a specific individual or organization using their name or postcode. At least one of `search_keyword` or `postcode` should be provided."
+					},
+					"response": [
+						{
+							"name": "Example Owner Search Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://uspto-trademark.p.rapidapi.com/v1/ownerSearch/netflix/",
+									"protocol": "https",
+									"host": [
+										"uspto-trademark",
+										"p",
+										"rapidapi",
+										"com"
+									],
+									"path": [
+										"v1",
+										"ownerSearch",
+										"netflix",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"count\": 1,\n\t\"items\": [\n\t\t{\n\t\t\t\"name\": \"NETFLIX, INC.\",\n\t\t\t\"address1\": \"5617 SCOTTS VALLEY DR.\",\n\t\t\t\"address2\": null,\n\t\t\t\"city\": \"SCOTTS VALLEY\",\n\t\t\t\"state\": \"CA\",\n\t\t\t\"country\": \"US\",\n\t\t\t\"postcode\": \"95066\",\n\t\t\t\"trademarks\": [\n\t\t\t\t{\n\t\t\t\t\t\"keyword\": \"NETFLICKS\",\n\t\t\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\t\t\"serial_number\": \"75412576\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Database Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/v1/databaseStatus",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"databaseStatus"
+							]
+						},
+						"description": "Retrieves information about the freshness and update status of the trademark database."
+					},
+					"response": [
+						{
+							"name": "Example Database Status Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://uspto-trademark.p.rapidapi.com/v1/databaseStatus",
+									"protocol": "https",
+									"host": [
+										"uspto-trademark",
+										"p",
+										"rapidapi",
+										"com"
+									],
+									"path": [
+										"v1",
+										"databaseStatus"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"last_update_date\":\"2025-05-22\",\n\t\"latest_trademarks\":[\n\t\t{\"keyword\":\"THE LEGACY CLUB\",\"registration_number\":\"0000000\",\"serial_number\":\"99033377\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"KAYAK LAUNCH IN A BOX\",\"registration_number\":\"0000000\",\"serial_number\":\"99026790\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"CANCER ENGINEERING SUMMIT\",\"registration_number\":\"0000000\",\"serial_number\":\"99025005\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"BLACKDOCTOR.ORG\",\"registration_number\":\"0000000\",\"serial_number\":\"98975905\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"GOLDBERG'S GARAGE\",\"registration_number\":\"0000000\",\"serial_number\":\"98975778\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"BOTTLE TAPE\",\"registration_number\":\"0000000\",\"serial_number\":\"98950978\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"KIRKWOOD\",\"registration_number\":\"0000000\",\"serial_number\":\"98941733\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"PROFESSIONAL RECRUITING/RETAINED SEARCH/PROJECT & INTERIM SERVICES, ACCOUNTING. FINANCE. TAX. AUDIT\",\"registration_number\":\"0000000\",\"serial_number\":\"98902225\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"TOX & TONIC\",\"registration_number\":\"0000000\",\"serial_number\":\"98871132\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"},\n\t\t{\"keyword\":\"UTAH CURLS\",\"registration_number\":\"0000000\",\"serial_number\":\"98859329\",\"status_label\":\"Live/Pending\",\"registration_date\":\"2025-06-10\"}\n\t]\n}"
+						}
+					]
+				}
+			],
+			"description": "Requests for retrieving single records or performing direct, non-paginated searches."
+		},
+		{
+			"name": "Batch & Paginated Searches",
+			"item": [
+				{
+					"name": "Batch Trademark Search - Initial Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keywords",
+									"value": "[\"google\",\"amazon\",\"ibm\"]",
+									"description": "A JSON array string of keywords to search for (e.g., [\"keyword1\",\"keyword2\"]). Max 100 keywords, each > 3 chars.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Set to 0 for the initial call to start from the beginning. For subsequent pagination calls, use `next_index` from the previous response.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Leave blank for the initial call. For subsequent pagination calls, use the `scroll_id` returned by the initial call.",
+									"type": "string",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Runs a keyword search on an array of keywords. This is the **initial call** that consumes credits (equal to number of keywords) and returns a `scroll_id` and pagination details, but no results. Use the 'Batch Trademark Search - Pagination Call' to retrieve results."
+					},
+					"response": [
+						{
+							"name": "Example Batch Trademark Search (Initial) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "keywords",
+											"value": "[\"google\",\"amazon\",\"ibm\"]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 3,\n\t\"start_index\": 0,\n\t\"next_index\": 0,\n\t\"scroll_id\": \"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdTdHMlJsNDUyMEw1UWpxNzQ1Ylk3QU56Mm5ScHNQSFN0ZTNJZkVzTHVaWWxRWVRqWExlOWpxNEw5YmQ4ZDVDT3NuTFFBWWZMaDlTTEcxbDIvSmZUNTBzZEx5RVNVN2dQTWVaYk50blJNa2dRPT0=\",\n\t\"scroll_expiration\": 1642550743,\n\t\"count\": 630,\n\t\"keywords\": [\n\t\t\"google\",\n\t\t\"amazon\",\n\t\t\"ibm\"\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Trademark Search - Pagination Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keywords",
+									"value": "[\"google\",\"amazon\",\"ibm\"]",
+									"description": "A JSON array string of keywords. Must be the same as the initial call's keywords.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Use the `next_index` value from the previous API response to paginate through results. Max 250 results per page.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFc1NBOGw4c091c09JcGZ2WUN5c3oxclY0b1FUSW9PYkNkRm9kRnRIcnMvZTdXbCtKaWdZWG84Z0FrRjQ2L05Fbjd6WjdqeXpudE9xdEx1cEgvSHFNNGxISWt3ZTlJN1diajBmYWFUdXZNc2orVGpnbzhpVEZwYmFuZDdVMVg1WFQwPQ==",
+									"description": "The `scroll_id` obtained from the initial call. Valid for ~1 hour.",
+									"type": "string"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v1/batchTrademarkSearch",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"batchTrademarkSearch"
+							]
+						},
+						"description": "Retrieves paginated results for a batch keyword search. This call consumes 0 credits. The `scroll_id` and `keywords` must match the initial call, and `start_index` should be set to `next_index` from the previous response."
+					},
+					"response": [
+						{
+							"name": "Example Batch Trademark Search (Pagination) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "keywords",
+											"value": "[\"google\",\"amazon\",\"ibm\"]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "250",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdTdHMlJsNDUyMEw1UWpxNzQ1Ylk3QU5BUEFqSnp3eDlnZ1B4b1E4Y002V0N5b21vNStzS3Z0ckh0ajV6S0Q5K0c5OU4xL1Rtd21xM0x0L2g9PQ==",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 250,\n\t\"scroll_id\": \"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdTdHMlJsNDUyMEw1UWpxNzQ1Ylk3QU56Mm5ScHNQSFN0ZTNJZkVzTHVaWWxRWVRqWExlOWpxNEw5YmQ4ZDVDT3NuTFFBWWZMaDlTTEcxbDIvSmZUNTBzZEx5RVNVN2dQTWVaYk50blJNa2dRPT0=\",\n\t\"scroll_expiration\": 1642550743,\n\t\"count\": 630,\n\t\"keywords\": [\n\t\t\"google\",\n\t\t\"amazon\",\n\t\t\"ibm\"\n\t],\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"GOOGLE NEST HUB\",\n\t\t\t\"registration_number\": \"6615801\",\n\t\t\t\"serial_number\": \"88478292\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\",\n\t\t\t\"status_date\": \"2022-01-11\",\n\t\t\t\"status_definition\": \"REGISTERED\",\n\t\t\t\"filing_date\": \"2019-06-18\",\n\t\t\t\"registration_date\": \"2022-01-11\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2028-01-11\",\n\t\t\t\"description\": \"Position 1 \\\"HUB\\\"\\n\\nPosition 2 Computer hardware for streaming and playing audio, video, and multimedia content, and for controlling televisions, monitors, gaming systems, and digital media streaming devices; Audio speakers; Loud Speakers; Voice controlled audio speakers; Electronic devices embedded with computer software that allows the sharing and transmission of data and information between devices for the purposes of facilitating environmental monitoring, control, and automation; Electronic monitors and sensors for monitoring light; Stand alone information device, namely, voice and manual controlled audio speakers withpersonal digital assistant capabilitiesfor streaming and playing audio, video,and multimedia content, for controllingtelevisions, monitors, gaming systems, and digital media streaming devices; Stand alone information device, namely, voice and manual controlled audio speakers with personal digital assistant capabilities for accessing and searching online databases and websites; Stand alone information device, namely, voice and manualcontrolled audio speakers with personaldigital assistant capabilities for providing personal concierge services for others initiated by voice-controlled commands, namely, adding and accessing calendar appointments, alarms, timers, reminders, making restaurant, travel, and hotelreservations, and making professional services appointments\\n\\nPosition 3 Telecommunication services, namely, transmission of phone calls, voice, data, graphics, images, audio and video clips by means of telecommunications networks, wireless communication networks, and theInternet\\n\\n\",\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"30\",\n\t\t\t\t\t\"owner_label\": \"Original Registrant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"Google LLC\",\n\t\t\t\t\t\"address1\": null,\n\t\t\t\t\t\"address2\": \"1600 Amphitheatre Parkway\",\n\t\t\t\t\t\"city\": \"Mountain View\",\n\t\t\t\t\t\"state\": \"CA\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"94043\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Trademark Full Text Search - Initial Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keyword",
+									"value": "urban",
+									"description": "The full-text keyword to search for. Note: Previous FAQ mentioned this takes an array, but screenshot showed single string.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Set to 0 for the initial call.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Leave blank for the initial call.",
+									"type": "string",
+									"disabled": true
+								},
+								{
+									"key": "fields",
+									"value": "[\"description\",\"owners\",\"registration_date\",\"status\",\"filing_date\",\"expiration_date\",\"abandonment_date\"]",
+									"description": "A JSON array string of desired fields to return (e.g., [\"registration_date\",\"status\"]). If omitted, a default set of fields might be returned. Refer to API documentation for full list of available fields.",
+									"type": "string"
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Performs a full-text keyword search. This is the **initial call** that consumes 5 credits and returns a `scroll_id`. Use the 'Batch Trademark Full Text Search - Pagination Call' to retrieve results."
+					},
+					"response": [
+						{
+							"name": "Example Batch Trademark Full Text Search (Initial) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "keyword",
+											"value": "urban",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"registration_date\",\"status\"]",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 5,\n\t\"start_index\": 0,\n\t\"next_index\": 0,\n\t\"scroll_id\": \"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdkFWdFdTandkeDVSZGpnbG1oTzE2ektYRVlQN25DTXIwUUF1VG5ZTmJ2bjR5T252R2owZGhMOTcwamhzcjZaUHFGMmJvS0VhaHp6V2FWRURUS2tMd0wrVXNyaFMvS2tzdUhaRlRYaDBhRi9nPT0=\",\n\t\"scroll_expiration\": 1645140437,\n\t\"count\": 6646,\n\t\"optional_fields\": [\n\t\t\"status_definition\",\n\t\t\"description\",\n\t\t\"owners\",\n\t\t\"abandonment_date\",\n\t\t\"expiration_date\",\n\t\t\"registration_date\",\n\t\t\"filing_date\",\n\t\t\"status_date\"\n\t],\n\t\"requested_fields\": [\n\t\t\"registration_date\",\n\t\t\"status_definition\"\n\t],\n\t\"keyword\": \"urban\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Trademark Full Text Search - Pagination Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keyword",
+									"value": "urban",
+									"description": "The full-text keyword to search for. Must be the same as the initial call.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Use the `next_index` value from the previous API response to paginate through results.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdFZUQnRwV1RyMWNQeDlWeEZlQS9hYzBMbkpaS3FmZHlFNUFhZWljL0Q3dGlIZVNud3BQTzFVQ0FoVFpnNDJZTHA0aGthZ1VCejVDRndaakJUSGU0TlMreTEwQ0FjSHdVczdMNXZRWDZXWWVHZ0lUSlRMSjdKZmtyL0VMWGllS1lFPQ==",
+									"description": "The `scroll_id` obtained from the initial call. Valid for ~1 hour.",
+									"type": "string"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v1/batchTrademarkFullTextSearch",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"batchTrademarkFullTextSearch"
+							]
+						},
+						"description": "Retrieves paginated results for a batch full text keyword search. This call consumes 0 credits. The `scroll_id`, `keyword`, and `fields` must match the initial call, and `start_index` should be set to `next_index` from the previous response."
+					},
+					"response": [
+						{
+							"name": "Example Batch Trademark Full Text Search (Pagination) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "keyword",
+											"value": "urban",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFc20zOC9zNFUwVExzVERDTDZPV0RQMi9sbkZIbnc0U1NadExyejVtRm9KdGJNbkF5cXNPbWtwdnFxUmlLWG5SNXFha2hqRm81SXhPVE5zUUtNQTRjNUFPRWE2bXlQRXFpVGF3RkhJbkQvNzZ3PT0=",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"registration_date\",\"status\"]",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 250,\n\t\"scroll_id\": \"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFc20zOC9zNFUwVExzVERDTDZPV0RQMi9sbkZIbnc0U1NadExyejVtRm9KdGJNbkF5cXNPbWtwdnFxUmlLWG5SNXFha2hqRm81SXhPVE5zRUtNQTRjNUFPRWE2bXlQRXFpVGF3RkhJbkQvNzZ3PT0=\",\n\t\"scroll_expiration\": 1645140090,\n\t\"count\": 6646,\n\t\"keyword\": \"urban\",\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"URBAN SECRETS\",\n\t\t\t\"registration_number\": \"6634315\",\n\t\t\t\"serial_number\": \"88879486\",\n\t\t\t\"status_label\": \"Live/Registered\",\n\t\t\t\"status_code\": \"700\"\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Serial Search - Initial Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "serial_numbers",
+									"value": "[90710040,90709119]",
+									"description": "A JSON array string of serial numbers (e.g., [12345678,987654321]).",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Set to 0 for the initial call.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Leave blank for the initial call.",
+									"type": "string",
+									"disabled": true
+								},
+								{
+									"key": "fields",
+									"value": "[\"description\",\"owners\",\"classification\",\"trademark_events\",\"filing_date\",\"registration_date\",\"expiration_date\"]",
+									"description": "A JSON array string of desired fields to return. If omitted, default comprehensive details are returned. Refer to API documentation for full list.",
+									"type": "string"
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Performs a search for multiple serial numbers. This is the **initial call** that returns a `scroll_id` (and possibly results, but the primary use is `scroll_id` for pagination). Max 25,000 items returned. Use the 'Batch Serial Search - Pagination Call' to retrieve further results."
+					},
+					"response": [
+						{
+							"name": "Example Batch Serial Search (Initial) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "serial_numbers",
+											"value": "[90710040,90709119]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"description\",\"owners\",\"p",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 2,\n\t\"scroll_id\": \"\\\"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=\\\"\",\n\t\"scroll_expiration\": 1644187915,\n\t\"count\": 2,\n\t\"serial_numbers\": [90710040,90709119],\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"ARENA PERFORMANCE INSTITUTE\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90710040\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 \\\"PERFORMANCE INSTITUTE\\\"\\n\\nPosition 2 Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"L10\",\n\t\t\t\"employee_name\": \"CHUO, EMILY M\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": \"2021-04-19\",\n\t\t\t\t\t\"first_use_in_commerce_date\": \"2021-04-19\",\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"D10000\",\n\t\t\t\t\t\"text\": \"\\\"PERFORMANCE INSTITUTE\\\"\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"XAEC\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEA\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT -WRITTEN\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-20\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Arena Innovation Corp.\",\n\t\t\t\t\t\"address1\": \"251 Little Falls Drive\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Wilmington\",\n\t\t\t\t\t\"state\": \"DE\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"19808\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"CREDIT STACKING\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90709119\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\\n\\nPosition 2 Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\\n\\nPosition 3 Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"N50\",\n\t\t\t\"employee_name\": \"YI, CRYSTAL HAEIN\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"035\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"035\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"036\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"036\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0351\",\n\t\t\t\t\t\"text\": \"Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0361\",\n\t\t\t\t\t\"text\": \"Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"13\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"12\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"11\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TEME\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS/EMAIL CORRESPONDENCE ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CRFA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"CORRESPONDENCE RECEIVED IN LAW OFFICE\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TROA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS RESPONSE TO OFFICE ACTION RECEIVED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAP\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"EPEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"COMBINED EXAMINER'S AMENDMENT/PRIORITY ACTION AUTOMATIC ENTRY\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CPEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT AND/OR PRIORITY ACTION - COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-21\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"New Reach 1, LLC\",\n\t\t\t\t\t\"address1\": \"350 W. Washington Street, Suite 201\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Tempe\",\n\t\t\t\t\t\"state\": \"AZ\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"85281\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Serial Search - Pagination Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "serial_numbers",
+									"value": "[90710040,90709119]",
+									"description": "A JSON array string of serial numbers. Must be the same as the initial call's serial_numbers.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "250",
+									"description": "Use the `next_index` value from the previous API response to paginate through results.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=",
+									"description": "The `scroll_id` obtained from the initial call. Valid for ~2 hours.",
+									"type": "string"
+								},
+								{
+									"key": "fields",
+									"value": "[\"description\",\"owners\",\"classification\",\"trademark_events\",\"filing_date\",\"registration_date\",\"expiration_date\"]",
+									"description": "A JSON array string of desired fields to return. Must be the same as the initial call's `fields` value.",
+									"type": "string"
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Retrieves paginated results for a batch serial number search. This call consumes 0 credits. The `scroll_id`, `serial_numbers`, and `fields` must match the initial call, and `start_index` should be set to `next_index` from the previous response."
+					},
+					"response": [
+						{
+							"name": "Example Batch Serial Search (Pagination) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "serial_numbers",
+											"value": "[90710040,90709119]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "250",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"description\",\"owners\",\"p",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 2,\n\t\"scroll_id\": \"\\\"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=\\\"\",\n\t\"scroll_expiration\": 1644187915,\n\t\"count\": 2,\n\t\"serial_numbers\": [90710040,90709119],\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"ARENA PERFORMANCE INSTITUTE\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90710040\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 \\\"PERFORMANCE INSTITUTE\\\"\\n\\nPosition 2 Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"L10\",\n\t\t\t\"employee_name\": \"CHUO, EMILY M\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": \"2021-04-19\",\n\t\t\t\t\t\"first_use_in_commerce_date\": \"2021-04-19\",\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"D10000\",\n\t\t\t\t\t\"text\": \"\\\"PERFORMANCE INSTITUTE\\\"\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"XAEC\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEA\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT -WRITTEN\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-20\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Arena Innovation Corp.\",\n\t\t\t\t\t\"address1\": \"251 Little Falls Drive\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Wilmington\",\n\t\t\t\t\t\"state\": \"DE\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"19808\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"CREDIT STACKING\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90709119\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\\n\\nPosition 2 Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\\n\\nPosition 3 Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"N50\",\n\t\t\t\"employee_name\": \"YI, CRYSTAL HAEIN\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"035\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"035\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"036\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"036\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0351\",\n\t\t\t\t\t\"text\": \"Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0361\",\n\t\t\t\t\t\"text\": \"Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"13\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"12\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"11\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TEME\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS/EMAIL CORRESPONDENCE ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CRFA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"CORRESPONDENCE RECEIVED IN LAW OFFICE\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TROA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS RESPONSE TO OFFICE ACTION RECEIVED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAP\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"EPEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"COMBINED EXAMINER'S AMENDMENT/PRIORITY ACTION AUTOMATIC ENTRY\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CPEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT AND/OR PRIORITY ACTION - COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-21\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"New Reach 1, LLC\",\n\t\t\t\t\t\"address1\": \"350 W. Washington Street, Suite 201\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Tempe\",\n\t\t\t\t\t\"state\": \"AZ\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"85281\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"CREDIT STACKING\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90709119\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\\n\\nPosition 2 Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\\n\\nPosition 3 Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"N50\",\n\t\t\t\"employee_name\": \"YI, CRYSTAL HAEIN\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"035\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"035\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"036\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"036\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0351\",\n\t\t\t\t\t\"text\": \"Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0361\",\n\t\t\t\t\t\"text\": \"Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"13\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"12\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"11\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TEME\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS/EMAIL CORRESPONDENCE ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CRFA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"CORRESPONDENCE RECEIVED IN LAW OFFICE\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TROA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS RESPONSE TO OFFICE ACTION RECEIVED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAP\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"EPEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"COMBINED EXAMINER'S AMENDMENT/PRIORITY ACTION AUTOMATIC ENTRY\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CPEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT AND/OR PRIORITY ACTION - COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-21\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"New Reach 1, LLC\",\n\t\t\t\t\t\"address1\": \"350 W. Washington Street, Suite 201\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Tempe\",\n\t\t\t\t\t\"state\": \"AZ\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"85281\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Owner Search - Initial Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keywords",
+									"value": "[\"slid\",\"expo\"]",
+									"description": "a JSON array of search terms as a string. Can be left empty when postcode use.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Set to 0 for the initial call.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Leave blank for the initial call.",
+									"type": "string",
+									"disabled": true
+								},
+								{
+									"key": "postcode",
+									"value": "",
+									"description": "A postcode value to use as search term. Can be left empty.",
+									"type": "string",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Performs a search for multiple serial numbers. This is the **initial call** that returns a `scroll_id` (and possibly results, but the primary use is `scroll_id` for pagination). Max 25,000 items returned. Use the 'Batch Serial Search - Pagination Call' to retrieve further results."
+					},
+					"response": [
+						{
+							"name": "Example Batch Serial Search (Initial) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "serial_numbers",
+											"value": "[90710040,90709119]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"description\",\"owners\",\"p",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 2,\n\t\"scroll_id\": \"\\\"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=\\\"\",\n\t\"scroll_expiration\": 1644187915,\n\t\"count\": 2,\n\t\"serial_numbers\": [90710040,90709119],\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"ARENA PERFORMANCE INSTITUTE\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90710040\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 \\\"PERFORMANCE INSTITUTE\\\"\\n\\nPosition 2 Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"L10\",\n\t\t\t\"employee_name\": \"CHUO, EMILY M\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": \"2021-04-19\",\n\t\t\t\t\t\"first_use_in_commerce_date\": \"2021-04-19\",\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"D10000\",\n\t\t\t\t\t\"text\": \"\\\"PERFORMANCE INSTITUTE\\\"\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"XAEC\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEA\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT -WRITTEN\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-20\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Arena Innovation Corp.\",\n\t\t\t\t\t\"address1\": \"251 Little Falls Drive\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Wilmington\",\n\t\t\t\t\t\"state\": \"DE\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"19808\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"CREDIT STACKING\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90709119\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\\n\\nPosition 2 Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\\n\\nPosition 3 Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"N50\",\n\t\t\t\"employee_name\": \"YI, CRYSTAL HAEIN\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"035\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"035\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"036\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"036\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0351\",\n\t\t\t\t\t\"text\": \"Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0361\",\n\t\t\t\t\t\"text\": \"Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"13\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"12\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"11\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TEME\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS/EMAIL CORRESPONDENCE ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CRFA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"CORRESPONDENCE RECEIVED IN LAW OFFICE\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TROA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS RESPONSE TO OFFICE ACTION RECEIVED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAP\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"EPEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"COMBINED EXAMINER'S AMENDMENT/PRIORITY ACTION AUTOMATIC ENTRY\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CPEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT AND/OR PRIORITY ACTION - COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-21\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"New Reach 1, LLC\",\n\t\t\t\t\t\"address1\": \"350 W. Washington Street, Suite 201\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Tempe\",\n\t\t\t\t\t\"state\": \"AZ\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"85281\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Owner Search - Initial Postcode Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keywords",
+									"value": "[\"slid\",\"expo\"]",
+									"description": "a JSON array of search terms as a string. Can be left empty when postcode use.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Set to 0 for the initial call.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Leave blank for the initial call.",
+									"type": "string",
+									"disabled": true
+								},
+								{
+									"key": "postcode",
+									"value": "",
+									"description": "A postcode value to use as search term. Can be left empty.",
+									"type": "string",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Performs a search for multiple serial numbers. This is the **initial call** that returns a `scroll_id` (and possibly results, but the primary use is `scroll_id` for pagination). Max 25,000 items returned. Use the 'Batch Serial Search - Pagination Call' to retrieve further results."
+					},
+					"response": [
+						{
+							"name": "Example Batch Serial Search (Initial) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "serial_numbers",
+											"value": "[90710040,90709119]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"description\",\"owners\",\"p",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 2,\n\t\"scroll_id\": \"\\\"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=\\\"\",\n\t\"scroll_expiration\": 1644187915,\n\t\"count\": 2,\n\t\"serial_numbers\": [90710040,90709119],\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"ARENA PERFORMANCE INSTITUTE\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90710040\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 \\\"PERFORMANCE INSTITUTE\\\"\\n\\nPosition 2 Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"L10\",\n\t\t\t\"employee_name\": \"CHUO, EMILY M\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": \"2021-04-19\",\n\t\t\t\t\t\"first_use_in_commerce_date\": \"2021-04-19\",\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"D10000\",\n\t\t\t\t\t\"text\": \"\\\"PERFORMANCE INSTITUTE\\\"\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"XAEC\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEA\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT -WRITTEN\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-20\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Arena Innovation Corp.\",\n\t\t\t\t\t\"address1\": \"251 Little Falls Drive\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Wilmington\",\n\t\t\t\t\t\"state\": \"DE\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"19808\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"CREDIT STACKING\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90709119\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\\n\\nPosition 2 Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\\n\\nPosition 3 Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"N50\",\n\t\t\t\"employee_name\": \"YI, CRYSTAL HAEIN\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"035\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"035\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"036\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"036\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0351\",\n\t\t\t\t\t\"text\": \"Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0361\",\n\t\t\t\t\t\"text\": \"Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"13\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"12\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"11\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TEME\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS/EMAIL CORRESPONDENCE ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CRFA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"CORRESPONDENCE RECEIVED IN LAW OFFICE\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TROA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS RESPONSE TO OFFICE ACTION RECEIVED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAP\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"EPEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"COMBINED EXAMINER'S AMENDMENT/PRIORITY ACTION AUTOMATIC ENTRY\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CPEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT AND/OR PRIORITY ACTION - COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-21\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"New Reach 1, LLC\",\n\t\t\t\t\t\"address1\": \"350 W. Washington Street, Suite 201\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Tempe\",\n\t\t\t\t\t\"state\": \"AZ\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"85281\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Batch Owner Search - Pagination call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "keywords",
+									"value": "[\"slid\",\"expo\"]",
+									"description": "a JSON array of search terms as a string. Can be left empty when postcode use.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Set to 0 for the initial call.",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdXZvQkY4cXdDS0M1T2xCdUFYcHZiWUI0ZExEazRkMjJYa2s0WHlwN2Q4Rm1WbE8rZ1l5ekdqeG5UTjRlbDRxMEZJVy94NFNqYjc0eUNha3I4NkdIbkZCZWdaZ1daK203YnBsK0VZRlVJK2J6NmZlMHNRR1ZRSGhlT3BRNFNOSnRFPQ==",
+									"description": "Leave blank for the initial call.",
+									"type": "string"
+								},
+								{
+									"key": "postcode",
+									"value": "",
+									"description": "A postcode value to use as search term. Can be left empty.",
+									"type": "string",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v1/batchOwnerSearch",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"batchOwnerSearch"
+							]
+						},
+						"description": "Performs a search for multiple serial numbers. This is the **initial call** that returns a `scroll_id` (and possibly results, but the primary use is `scroll_id` for pagination). Max 25,000 items returned. Use the 'Batch Serial Search - Pagination Call' to retrieve further results."
+					},
+					"response": [
+						{
+							"name": "Example Batch Serial Search (Initial) Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "serial_numbers",
+											"value": "[90710040,90709119]",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										},
+										{
+											"key": "scroll_id",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "fields",
+											"value": "[\"description\",\"owners\",\"p",
+											"type": "string"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"requests\": 0,\n\t\"start_index\": 0,\n\t\"next_index\": 2,\n\t\"scroll_id\": \"\\\"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFdWRkRTVnRXdNQS9JcmR0czhKd3Ewa0VIVjl0b0t2LzBFOVBLK2dNY1hUVFFvL0V2N1lMbG0zU28rQ3JRY0VScTdjQWRVM1FoWEFvc1ZneDZvS2svZ2tsOFpqWjg2dFJMUFVVV1ZHMHBTdUlnPT0=\\\"\",\n\t\"scroll_expiration\": 1644187915,\n\t\"count\": 2,\n\t\"serial_numbers\": [90710040,90709119],\n\t\"results\": [\n\t\t{\n\t\t\t\"keyword\": \"ARENA PERFORMANCE INSTITUTE\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90710040\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 \\\"PERFORMANCE INSTITUTE\\\"\\n\\nPosition 2 Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"L10\",\n\t\t\t\"employee_name\": \"CHUO, EMILY M\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": \"2021-04-19\",\n\t\t\t\t\t\"first_use_in_commerce_date\": \"2021-04-19\",\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"D10000\",\n\t\t\t\t\t\"text\": \"\\\"PERFORMANCE INSTITUTE\\\"\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing classes, workshops and seminars in the fields of fitness and exercise; providing fitness and exercise facilities; physical fitness instruction and consultation; physical fitness conditioning classes; physical fitness training services; providing a website featuring information on exercise and physical fitness accessible through a global computer network and mobile devices\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"XAEC\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GNEA\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT -WRITTEN\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-20\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"03\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Corporation\",\n\t\t\t\t\t\"name\": \"Arena Innovation Corp.\",\n\t\t\t\t\t\"address1\": \"251 Little Falls Drive\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Wilmington\",\n\t\t\t\t\t\"state\": \"DE\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"19808\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"keyword\": \"CREDIT STACKING\",\n\t\t\t\"registration_number\": \"0000000\",\n\t\t\t\"serial_number\": \"90709119\",\n\t\t\t\"status_label\": \"Live/Pending\",\n\t\t\t\"status_code\": \"681\",\n\t\t\t\"status_date\": \"2022-01-27\",\n\t\t\t\"status_definition\": \"PUBLICATION/ISSUE REVIEW COMPLETE\",\n\t\t\t\"filing_date\": \"2021-05-13\",\n\t\t\t\"registration_date\": \"2022-03-01\",\n\t\t\t\"abandonment_date\": null,\n\t\t\t\"expiration_date\": \"2022-03-01\",\n\t\t\t\"description\": \"Position 1 Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\\n\\nPosition 2 Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\\n\\nPosition 3 Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\\n\\n\",\n\t\t\t\"publised_opposition_date\": null,\n\t\t\t\"mark_drawing_code\": \"4000\",\n\t\t\t\"law_office_assigned_location_code\": \"N50\",\n\t\t\t\"employee_name\": \"YI, CRYSTAL HAEIN\",\n\t\t\t\"current_location\": \"PUBLICATION AND ISSUE SECTION\",\n\t\t\t\"classification\": [\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"035\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"035\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"036\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"102\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"036\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"international_code_total_no\": \"1\",\n\t\t\t\t\t\"international_code\": \"041\",\n\t\t\t\t\t\"us_code_total_no\": \"3\",\n\t\t\t\t\t\"us_code\": [\n\t\t\t\t\t\t\"100\",\n\t\t\t\t\t\t\"101\",\n\t\t\t\t\t\t\"107\"\n\t\t\t\t\t],\n\t\t\t\t\t\"status_code\": \"6\",\n\t\t\t\t\t\"first_use_anywhere_date\": null,\n\t\t\t\t\t\"first_use_in_commerce_date\": null,\n\t\t\t\t\t\"primary_code\": \"041\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"statements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0351\",\n\t\t\t\t\t\"text\": \"Providing business advisory services and business consultancy with regard to financing, investing, and credit management; business information, advisory and consultancy services relating to business provided live, online, and via the internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0361\",\n\t\t\t\t\t\"text\": \"Providing information in the field of finance; Credit counseling services; financial information relating to personal finance and credit score management and improvement, provided live, online, and via the Internet\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type-code\": \"GS0411\",\n\t\t\t\t\t\"text\": \"Providing a web site featuring blogs and non-downloadable training videos and online publications in the nature of brochures, articles and forms in the fields of finance and money management; Providing education courses and modules in the field of finance and credit management offered through online, non-downloadable videos and live consultations; Education services, namely, mentoring in the fields of personal and business financing and credit management\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"trademark_events\": [\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"PREV\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"LAW OFFICE PUBLICATION REVIEW COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"13\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"ALIE\",\n\t\t\t\t\t\"type\": \"A\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO LIE\",\n\t\t\t\t\t\"date\": \"2022-01-27\",\n\t\t\t\t\t\"number\": \"12\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CNTA\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"APPROVED FOR REGISTRATION SUPPLEMENTAL REGISTER\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"11\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TEME\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS/EMAIL CORRESPONDENCE ENTERED\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"10\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CRFA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"CORRESPONDENCE RECEIVED IN LAW OFFICE\",\n\t\t\t\t\t\"date\": \"2022-01-26\",\n\t\t\t\t\t\"number\": \"9\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"TROA\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"TEAS RESPONSE TO OFFICE ACTION RECEIVED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"8\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"NOTIFICATION OF EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"7\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"GEAP\",\n\t\t\t\t\t\"type\": \"F\",\n\t\t\t\t\t\"description-text\": \"EXAMINER'S AMENDMENT/PRIORITY ACTION E-MAILED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"6\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"EPEN\",\n\t\t\t\t\t\"type\": \"O\",\n\t\t\t\t\t\"description-text\": \"COMBINED EXAMINER'S AMENDMENT/PRIORITY ACTION AUTOMATIC ENTRY\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"5\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"CPEA\",\n\t\t\t\t\t\"type\": \"R\",\n\t\t\t\t\t\"description-text\": \"EXAMINERS AMENDMENT AND/OR PRIORITY ACTION - COMPLETED\",\n\t\t\t\t\t\"date\": \"2022-01-24\",\n\t\t\t\t\t\"number\": \"4\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"DOCK\",\n\t\t\t\t\t\"type\": \"D\",\n\t\t\t\t\t\"description-text\": \"ASSIGNED TO EXAMINER\",\n\t\t\t\t\t\"date\": \"2022-01-21\",\n\t\t\t\t\t\"number\": \"3\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWOS\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION OFFICE SUPPLIED DATA ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-08-12\",\n\t\t\t\t\t\"number\": \"2\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"code\": \"NWAP\",\n\t\t\t\t\t\"type\": \"I\",\n\t\t\t\t\t\"description-text\": \"NEW APPLICATION ENTERED IN TRAM\",\n\t\t\t\t\t\"date\": \"2021-05-17\",\n\t\t\t\t\t\"number\": \"1\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"owners\": [\n\t\t\t\t{\n\t\t\t\t\t\"index\": 1,\n\t\t\t\t\t\"owner_type\": \"10\",\n\t\t\t\t\t\"owner_label\": \"Original Applicant\",\n\t\t\t\t\t\"legal_entity_type\": \"16\",\n\t\t\t\t\t\"legal_entity_type_label\": \"Limited Liability Company\",\n\t\t\t\t\t\"name\": \"New Reach 1, LLC\",\n\t\t\t\t\t\"address1\": \"350 W. Washington Street, Suite 201\",\n\t\t\t\t\t\"address2\": null,\n\t\t\t\t\t\"city\": \"Tempe\",\n\t\t\t\t\t\"state\": \"AZ\",\n\t\t\t\t\t\"country\": \"US\",\n\t\t\t\t\t\"postcode\": \"85281\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}"
+						}
+					]
+				},
+				{
+					"name": "Trademark Expiring",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "start_date",
+									"value": "2025-05-20",
+									"description": "Start date for the expiration period (YYYY-MM-DD). The date range between start_date and end_date must not exceed 7 days.",
+									"type": "string"
+								},
+								{
+									"key": "end_date",
+									"value": "2025-05-25",
+									"description": "End date for the expiration period (YYYY-MM-DD). The date range between start_date and end_date must not exceed 7 days.",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Starting index for pagination (0 for first page).",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Scroll ID for pagination. Leave empty for initial call. Valid for ~2 hours.",
+									"type": "string",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": ""
+						},
+						"description": "Retrieves trademarks projected to expire within a specified date range. The maximum range between `start_date` and `end_date` is 7 days. Supports pagination (max 250 results per request)."
+					},
+					"response": [
+						{
+							"name": "Example Trademark Expiring Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "start_date",
+											"value": "2025-05-20",
+											"type": "string"
+										},
+										{
+											"key": "end_date",
+											"value": "2025-05-25",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 7917,\n    \"start_index\": 0,\n    \"next_index\": 250,\n    \"start_date\": \"2025-05-20\",\n    \"end_date\": \"2025-05-25\",\n    \"scroll_id\": \"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFc0kwUnVtSHhyVmxtYzgrSDV2cU9uUnA3QTVreVFtd0NLTTdZSEdjRTFjUzQycDh3QnBuSERURnVhTzkvdzYvRk1rejVaSlFQZ3hOSlpWZkt4WEhpK05BUEZqSHE1VStLMmJYQ1kyQ3RqUHp3PT0=\",\n    \"results\": [\n        {\n            \"keyword\": \"POEUU\",\n            \"registration_number\": \"7803140\",\n            \"serial_number\": \"98735813\",\n            \"status_label\": \"Live/Pending\",\n            \"status_code\": \"686\",\n            \"status_date\": \"2025-04-01\",\n            \"status_definition\": \"PUBLISHED FOR OPPOSITION\",\n            \"filing_date\": \"2024-09-05\",\n            \"registration_date\": \"2025-05-20\",\n            \"abandonment_date\": \"\",\n            \"expiration_date\": \"2031-05-20\",\n            \"logo\": \"https://tsdr.uspto.gov/img/98735813/large\",\n            \"description\": \"3D printers; Chainsaws; Drilling machines; Electric coffee grinders; Electric juice extractors; Electric vacuum cleaners; Hydraulic pumps; Lawn mowers; Power drills; Pressure washing machines; Screwdrivers, electric; Steam cleaners for household purposes; Steam mops; Swimming pool sweepers\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Trademarks by Registration Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "start_date",
+									"value": "2023-03-14",
+									"description": "Start date for the registration period (YYYY-MM-DD).",
+									"type": "string"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-03-17",
+									"description": "End date for the registration period (YYYY-MM-DD).",
+									"type": "string"
+								},
+								{
+									"key": "start_index",
+									"value": "0",
+									"description": "Starting index for pagination (0 for first page).",
+									"type": "number"
+								},
+								{
+									"key": "scroll_id",
+									"value": "",
+									"description": "Scroll ID for pagination. Leave empty for initial call. Valid for ~2 hours.",
+									"type": "string",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v1/trademarkByRegistrationDate",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v1",
+								"trademarkByRegistrationDate"
+							]
+						},
+						"description": "Retrieves trademarks registered within a specified date range. Supports pagination (max 250 results per request)."
+					},
+					"response": [
+						{
+							"name": "Example Trademarks by Registration Date Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "start_date",
+											"value": "2025-05-20",
+											"type": "string"
+										},
+										{
+											"key": "end_date",
+											"value": "2025-05-25",
+											"type": "string"
+										},
+										{
+											"key": "start_index",
+											"value": "0",
+											"type": "number"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 7917,\n    \"start_index\": 0,\n    \"next_index\": 250,\n    \"start_date\": \"2025-05-20\",\n    \"end_date\": \"2025-05-25\",\n    \"scroll_id\": \"L2I1QjQ1aHpKMXpIWXI4eG5UbUpwdnJmUFVvWStJNlBYenZFZ1NYUUlFc0kwUnVtSHhyVmxtYzgrSDV2cU9uUnA3QTVreVFtd0NLTTdZSEdjRTFjUzQycDh3QnBuSERURnVhTzkvdzYvRk1rejVaSlFQZ3hOSlpWZkt4WEhpK05BUEZqSHE1VStLMmJYQ1kyQ3RqUHp3PT0=\",\n    \"results\": [\n        {\n            \"keyword\": \"POEUU\",\n            \"registration_number\": \"7803140\",\n            \"serial_number\": \"98735813\",\n            \"status_label\": \"Live/Pending\",\n            \"status_code\": \"686\",\n            \"status_date\": \"2025-04-01\",\n            \"status_definition\": \"PUBLISHED FOR OPPOSITION\",\n            \"filing_date\": \"2024-09-05\",\n            \"registration_date\": \"2025-05-20\",\n            \"abandonment_date\": \"\",\n            \"expiration_date\": \"2031-05-20\",\n            \"logo\": \"https://tsdr.uspto.gov/img/98735813/large\",\n            \"description\": \"3D printers; Chainsaws; Drilling machines; Electric coffee grinders; Electric juice extractors; Electric vacuum cleaners; Hydraulic pumps; Lawn mowers; Power drills; Pressure washing machines; Screwdrivers, electric; Steam cleaners for household purposes; Steam mops; Swimming pool sweepers\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "Requests designed for larger data retrieval, supporting batch inputs and pagination."
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{rapidapi_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-rapidapi-key",
+				"type": "string"
+			},
+			{
+				"key": "X-RapidAPI-Key",
+				"value": "{{rapidapi_key}}",
+				"type": "string"
+			},
+			{
+				"key": "X-RapidAPI-Host",
+				"value": "{{rapidapi_host}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://uspto-trademark.p.rapidapi.com",
+			"type": "string"
+		},
+		{
+			"key": "rapidapi_key",
+			"value": "YOUR_RAPIDAPI_KEY_HERE",
+			"type": "string"
+		},
+		{
+			"key": "rapidapi_host",
+			"value": "uspto-trademark.p.rapidapi.com",
+			"type": "string"
+		}
+	]
+}

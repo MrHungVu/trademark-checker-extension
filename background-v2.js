@@ -1,4 +1,6 @@
-const WORKER_URL = 'https://your-worker.workers.dev/check-trademark';
+// USPTO API configuration
+const USPTO_API_BASE = 'https://uspto-trademark.p.rapidapi.com';
+let API_KEY = null;
 
 console.log('🔍 Trademark Checker Extension V2: Background service loaded');
 
@@ -65,6 +67,24 @@ const KNOWN_TRADEMARKS = {
   'let\'s play': { owner: 'Various Gaming Companies', severity: 'low', category: 'phrase' }
 };
 
+// Load API key on startup
+chrome.storage.sync.get(['rapidApiKey'], (settings) => {
+  if (settings.rapidApiKey) {
+    API_KEY = settings.rapidApiKey;
+    console.log('🔍 USPTO API key loaded');
+  } else {
+    console.warn('🔍 No USPTO API key found, using cached data only');
+  }
+});
+
+// Listen for storage changes
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace === 'sync' && changes.rapidApiKey) {
+    API_KEY = changes.rapidApiKey.newValue || null;
+    console.log('🔍 USPTO API key updated');
+  }
+});
+
 // Message listener
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('🔍 Background: Received message:', request.action);
@@ -109,9 +129,19 @@ async function handleBatchCheck(terms) {
 async function checkSingleTerm(term) {
   const normalizedTerm = term.toLowerCase().trim();
   
-  // First check known trademarks
+  // First do a quick check in our known trademarks cache
   if (KNOWN_TRADEMARKS[normalizedTerm]) {
     const trademark = KNOWN_TRADEMARKS[normalizedTerm];
+    // Still verify with real API if we have a key
+    if (API_KEY) {
+      try {
+        const apiResult = await checkWithUSPTO(term);
+        if (apiResult) return apiResult;
+      } catch (error) {
+        console.error('USPTO API error, falling back to cache:', error);
+      }
+    }
+    
     return {
       term: term,
       status: 'conflict',
@@ -119,8 +149,20 @@ async function checkSingleTerm(term) {
       trademark: term.toUpperCase(),
       owner: trademark.owner,
       category: trademark.category,
-      registrationNumber: generateMockRegistration(normalizedTerm)
+      registrationNumber: generateMockRegistration(normalizedTerm),
+      source: 'cache'
     };
+  }
+  
+  // Check with real USPTO API if we have API key
+  if (API_KEY) {
+    try {
+      const apiResult = await checkWithUSPTO(term);
+      if (apiResult) return apiResult;
+    } catch (error) {
+      console.error('USPTO API error:', error);
+      // Fall through to local checks
+    }
   }
   
   // Check if it's a variation of known trademarks
@@ -134,43 +176,9 @@ async function checkSingleTerm(term) {
         owner: trademark.owner,
         category: trademark.category,
         registrationNumber: generateMockRegistration(knownTerm),
-        note: 'Similar to registered trademark'
+        note: 'Similar to registered trademark',
+        source: 'cache'
       };
-    }
-  }
-  
-  // If not found in known trademarks, check with API (or mock)
-  if (WORKER_URL.includes('your-worker.workers.dev')) {
-    // Mock response for unknown terms
-    // Simulate that some random terms might have issues
-    const randomCheck = Math.random();
-    
-    if (randomCheck < 0.05) { // 5% chance of being a trademark
-      return {
-        term: term,
-        status: 'warning',
-        severity: 'low',
-        trademark: term.toUpperCase(),
-        owner: 'Unknown Entity',
-        category: 'general',
-        registrationNumber: generateMockRegistration(term),
-        note: 'Potential trademark'
-      };
-    }
-  } else {
-    // Real API call would go here
-    try {
-      const response = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ term })
-      });
-      
-      if (response.ok) {
-        return await response.json();
-      }
-    } catch (error) {
-      console.error('API error for term:', term, error);
     }
   }
   
@@ -182,8 +190,76 @@ async function checkSingleTerm(term) {
     trademark: null,
     owner: null,
     category: null,
-    registrationNumber: null
+    registrationNumber: null,
+    source: API_KEY ? 'api' : 'cache'
   };
+}
+
+// Check trademark using real USPTO API
+async function checkWithUSPTO(term) {
+  try {
+    // First check availability
+    const availResponse = await fetch(`${USPTO_API_BASE}/v1/trademarkAvailable/${encodeURIComponent(term)}`, {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': API_KEY,
+        'X-RapidAPI-Host': 'uspto-trademark.p.rapidapi.com'
+      }
+    });
+    
+    if (!availResponse.ok) {
+      throw new Error(`USPTO API error: ${availResponse.statusText}`);
+    }
+    
+    const availData = await availResponse.json();
+    const isAvailable = availData[0]?.available === 'yes';
+    
+    if (isAvailable) {
+      return {
+        term: term,
+        status: 'clear',
+        severity: 'none',
+        trademark: null,
+        owner: null,
+        category: null,
+        registrationNumber: null,
+        source: 'api'
+      };
+    }
+    
+    // If not available, get detailed info
+    const searchResponse = await fetch(`${USPTO_API_BASE}/v1/trademarkSearch/${encodeURIComponent(term)}`, {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': API_KEY,
+        'X-RapidAPI-Host': 'uspto-trademark.p.rapidapi.com'
+      }
+    });
+    
+    if (searchResponse.ok) {
+      const searchData = await searchResponse.json();
+      const firstResult = Array.isArray(searchData) ? searchData[0] : searchData;
+      
+      if (firstResult) {
+        return {
+          term: term,
+          status: 'conflict',
+          severity: 'high',
+          trademark: firstResult.wordmark || term.toUpperCase(),
+          owner: firstResult.owner || firstResult.correspondent || 'Unknown',
+          category: firstResult.internationalClassDescriptions?.[0] || 'general',
+          registrationNumber: firstResult.registrationNumber || firstResult.serialNumber || null,
+          source: 'api',
+          apiData: firstResult
+        };
+      }
+    }
+  } catch (error) {
+    console.error('USPTO API error for term:', term, error);
+    throw error;
+  }
+  
+  return null;
 }
 
 function generateMockRegistration(term) {

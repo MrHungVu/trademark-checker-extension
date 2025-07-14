@@ -2,11 +2,9 @@
 
 // Default settings
 const defaultSettings = {
-  apiKey: '',
-  apiEndpoint: 'https://api.example.com/trademark',
+  rapidApiKey: '',
   autoSearch: false,
   showNotifications: true,
-  searchRegion: 'us',
   resultsLimit: 10,
   darkMode: false
 };
@@ -23,30 +21,40 @@ document.getElementById('resetButton').addEventListener('click', resetSettings);
 // Load settings from storage
 function loadSettings() {
   chrome.storage.sync.get(defaultSettings, (settings) => {
-    document.getElementById('apiKey').value = settings.apiKey;
-    document.getElementById('apiEndpoint').value = settings.apiEndpoint;
+    if (settings.rapidApiKey) {
+      document.getElementById('rapidApiKey').value = settings.rapidApiKey;
+      updateApiStatus(settings.rapidApiKey);
+    }
     document.getElementById('autoSearch').checked = settings.autoSearch;
     document.getElementById('showNotifications').checked = settings.showNotifications;
-    document.getElementById('searchRegion').value = settings.searchRegion;
     document.getElementById('resultsLimit').value = settings.resultsLimit;
     document.getElementById('darkMode').checked = settings.darkMode;
   });
 }
 
 // Save settings to storage
-function saveSettings() {
+async function saveSettings() {
   const settings = {
-    apiKey: document.getElementById('apiKey').value,
-    apiEndpoint: document.getElementById('apiEndpoint').value,
+    rapidApiKey: document.getElementById('rapidApiKey').value,
     autoSearch: document.getElementById('autoSearch').checked,
     showNotifications: document.getElementById('showNotifications').checked,
-    searchRegion: document.getElementById('searchRegion').value,
     resultsLimit: parseInt(document.getElementById('resultsLimit').value),
     darkMode: document.getElementById('darkMode').checked
   };
   
+  // Test API key if provided
+  if (settings.rapidApiKey) {
+    showStatus('Testing API key...', 'info');
+    const isValid = await testApiKey(settings.rapidApiKey);
+    if (!isValid) {
+      showStatus('Invalid API key. Please check and try again.', 'error');
+      return;
+    }
+  }
+  
   chrome.storage.sync.set(settings, () => {
     showStatus('Settings saved successfully!', 'success');
+    updateApiStatus(settings.rapidApiKey);
   });
 }
 
@@ -69,4 +77,33 @@ function showStatus(message, type) {
   setTimeout(() => {
     statusElement.className = 'status-message';
   }, 3000);
+}
+
+// Test API key validity
+async function testApiKey(apiKey) {
+  try {
+    const response = await fetch('https://uspto-trademark.p.rapidapi.com/v1/trademarkAvailable/test', {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': 'uspto-trademark.p.rapidapi.com'
+      }
+    });
+    return response.ok;
+  } catch (error) {
+    console.error('API key test error:', error);
+    return false;
+  }
+}
+
+// Update API status display
+function updateApiStatus(apiKey) {
+  const statusElement = document.getElementById('apiStatus');
+  if (apiKey) {
+    statusElement.textContent = 'Configured';
+    statusElement.style.color = '#4CAF50';
+  } else {
+    statusElement.textContent = 'Not configured';
+    statusElement.style.color = '#f44336';
+  }
 }
