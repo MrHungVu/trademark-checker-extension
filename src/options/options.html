@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trademark Checker Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Trademark Checker Settings</h1>
+    
+    <section class="settings-section">
+      <h2>API Configuration</h2>
+      <div class="form-group">
+        <label for="apiKey">API Key:</label>
+        <input type="password" id="apiKey" placeholder="Enter your API key">
+      </div>
+      <div class="form-group">
+        <label for="apiEndpoint">API Endpoint:</label>
+        <input type="text" id="apiEndpoint" placeholder="https://api.example.com/trademark">
+      </div>
+    </section>
+    
+    <section class="settings-section">
+      <h2>Search Preferences</h2>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="autoSearch">
+          Enable automatic search on text selection
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="showNotifications">
+          Show desktop notifications for results
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="searchRegion">Search Region:</label>
+        <select id="searchRegion">
+          <option value="us">United States</option>
+          <option value="eu">European Union</option>
+          <option value="uk">United Kingdom</option>
+          <option value="ca">Canada</option>
+          <option value="au">Australia</option>
+          <option value="global">Global</option>
+        </select>
+      </div>
+    </section>
+    
+    <section class="settings-section">
+      <h2>Display Options</h2>
+      <div class="form-group">
+        <label for="resultsLimit">Maximum results to display:</label>
+        <input type="number" id="resultsLimit" min="1" max="50" value="10">
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="darkMode">
+          Enable dark mode
+        </label>
+      </div>
+    </section>
+    
+    <div class="button-group">
+      <button id="saveButton" class="primary">Save Settings</button>
+      <button id="resetButton">Reset to Defaults</button>
+    </div>
+    
+    <div id="statusMessage" class="status-message"></div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>

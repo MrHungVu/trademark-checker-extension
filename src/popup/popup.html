@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trademark Checker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <h1>Trademark Checker</h1>
+    
+    <div class="search-section">
+      <input type="text" id="searchInput" placeholder="Enter trademark to search..." />
+      <button id="searchButton">Search</button>
+    </div>
+    
+    <div class="history-section">
+      <h2>Recent Searches</h2>
+      <ul id="historyList"></ul>
+    </div>
+    
+    <div class="footer">
+      <a href="#" id="settingsLink">Settings</a>
+      <span>|</span>
+      <a href="#" id="helpLink">Help</a>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
