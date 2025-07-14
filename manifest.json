@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Trademark Checker for Etsy",
-  "version": "1.0.0",
-  "description": "Automatically check trademark status for Etsy listings to prevent legal issues",
+  "version": "2.0.0",
+  "description": "Real-time trademark analysis with inline highlighting for Etsy listings",
   "permissions": [
     "storage"
   ],
@@ -10,13 +10,13 @@
     "https://*.etsy.com/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background-v2.js"
   },
   "content_scripts": [
     {
       "matches": ["https://*.etsy.com/listing/*"],
-      "js": ["content-script.js"],
-      "css": ["styles.css"],
+      "js": ["content-script-v2.js"],
+      "css": ["styles-v2.css"],
       "run_at": "document_idle"
     }
   ],
